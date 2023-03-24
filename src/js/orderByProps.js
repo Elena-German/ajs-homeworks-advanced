@@ -1,19 +1,17 @@
 export default function orderByProps(obj, sortOrder) {
-  const arrPropertySortedList = [];
-  const arrPropertyList = Object.keys(obj);
+  // Сохранить список ключей исходного объекта (Object.keys)
+  const allProperty = Object.keys(obj);
 
-  sortOrder.forEach((item) => {
-    for (const prop in obj) {
-      if (prop === item) {
-        arrPropertySortedList.push({ key: prop, value: obj[prop] });
-        arrPropertyList.splice(arrPropertyList.indexOf(item), 1);
-      }
-    }
-  });
-  arrPropertyList.sort();
-  arrPropertyList.forEach((item) => {
-    arrPropertySortedList.push({ key: item, value: obj[item] });
-  });
+  // Отфильтровать ключи, которые не нужно сортировать (Array.prototype.filter)
+  const arrNoSort = allProperty.filter((item) => sortOrder.includes(item));
 
-  return arrPropertySortedList;
+  // Отсортировать ключи, которые нужно сортировать: (Array.prototype.sort)
+  const alphaberSort = allProperty.filter((item) => !(sortOrder.includes(item)));
+  alphaberSort.sort();
+
+  // Объединить массив (sort, alphaberSort), пройтись по нему (Array.prototype.map) и дать ответ
+  const arrPropertySortedList = arrNoSort.concat(alphaberSort);
+  const result = arrPropertySortedList.map((item) => ({ key: item, value: obj[item] }));
+
+  return result;
 }
